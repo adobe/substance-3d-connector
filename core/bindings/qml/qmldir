@@ -1,0 +1,2 @@
+plugin connector ./
+classname ConnectorPlugin

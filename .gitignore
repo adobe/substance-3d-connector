@@ -1,0 +1,29 @@
+# Build Directories
+**/[bB]uild/**/*
+
+# Local install directories
+**/[iI]nstall/**/*
+
+**/*.swp
+
+# Python compiled files
+**/*.pyc
+
+# All python cache directories and bytecode files
+**/__pycache__
+
+# Python virtual environments
+**/venv/**/*
+
+# Windows RC files
+**/*.aps
+
+# Mac folder config
+**/*.DS_Store
+
+# All vim swap files
+**/*.swp
+**/*.log
+
+# Generated doc files
+**/[dD]ocs/**/*

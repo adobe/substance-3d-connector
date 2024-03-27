@@ -1,0 +1,35 @@
+#!/usr/bin/env python
+
+""" Utility script to easily generate a UUID formatted in a
+    way that Connector will be able to easily work with """
+
+import sys
+import uuid
+
+def format_uuid_32(uuid_input, delim=' '):
+    """ Formats a uuid string to be displayed as four hex values """
+    temp_array = []
+    for i in range(0, 4):
+        # Split the string into four pieces of size 8. Prepend
+        # a 0x and append a u for an easy unsigned, 32-bit C integer
+        temp_array.append('0x' + uuid_input[i*8:(i+1)*8] + 'u')
+
+    return delim.join(temp_array)
+
+def main(argv):
+    # Generate random uuid
+    uuid_res = uuid.uuid4()
+
+    # Print out the string representation
+    if '-lazy' in argv:
+        print('/* ' + str(uuid_res) + ' */')
+        print('{' + format_uuid_32(uuid_res.hex, delim=', ') + '}')
+    elif '-lazycpp' in argv:
+        print('// ' + str(uuid_res))
+        print('{' + format_uuid_32(uuid_res.hex, delim=', ') + '}')
+    else:
+        print(uuid_res)
+        print(format_uuid_32(uuid_res.hex))
+
+if __name__ == '__main__':
+    main(sys.argv)
