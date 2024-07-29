@@ -27,7 +27,7 @@ void send_to_schema::Serialize(Json::Value& root)
 	root["name"] = name;
 	root["uuid"] = uuid;
 	root["type"] = type;
-	root["takeOwnership"] = take_file_ownership;
+	root["take_file_ownership"] = take_file_ownership;
 }
 
 void send_to_schema::Deserialize(const std::string& json)
@@ -53,7 +53,7 @@ void send_to_schema::Deserialize(const Json::Value& root)
 	name = root.get("name", "").asString();
 	uuid = root.get("uuid", "").asString();
 	type = root.get("type", "").asString();
-	take_file_ownership = root.get("takeOwnership", false).asBool();
+	take_file_ownership = root.get("take_file_ownership", false).asBool();
 }
 
 std::string send_to_schema::GetJsonString()
@@ -66,19 +66,19 @@ std::string send_to_schema::GetJsonString()
 	return std::move(value_string);
 }
 
-std::string send_to_schema::getPathExtention()
+std::string send_to_schema::getPathExtension()
 {
-	std::string fileExtention = "";
+	std::string fileExtension = "";
 	if (path.length() > 0)
 	{
-		fileExtention = path.substr(path.find_last_of(".") + 1);
+		fileExtension = path.substr(path.find_last_of(".") + 1);
 	}
-	return std::move(fileExtention);
+	return std::move(fileExtension);
 }
 
-bool send_to_schema::isPathFileExtention(const std::string& extention)
+bool send_to_schema::isPathFileExtension(const std::string& extension)
 {
-	return this->getPathExtention().compare(extention) == 0;
+	return this->getPathExtension().compare(extension) == 0;
 }
 
 } // namespace Details

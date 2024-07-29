@@ -4,6 +4,7 @@
 import uuid
 import json
 import jsonschema
+import os.path
 
 from .instance import ConnectorInstance
 from .application import BaseApplication
@@ -16,7 +17,7 @@ SCHEMA = {
         "name": {"type": "string"},
         "uuid": {"type": "string"},
         "type": {"type": "string"},
-        "takeOwnership": {"type": "boolean"},
+        "take_file_ownership": {"type": "boolean"},
     },
     "required": ["path", "uuid"],
 }
@@ -29,7 +30,7 @@ class MessageSchema:
         self.name = ""
         self.uuid = str(uuid.uuid4())
         self.type = asset_type
-        self.takeOwnership = False
+        self.take_file_ownership = False
 
     def to_json(self):
         """ Returns a json string of this object"""
@@ -68,12 +69,15 @@ class AssetImportApplication(BaseApplication):
         print(message)
 
     @classmethod
-    def send_import_asset(cls, context, message):
+    def send_import_asset(cls, context, arguments):
         """ Send an sbs/sbsar file to another application """
-        schema_instance = MessageSchema(message)
+        schema_instance = MessageSchema(arguments[0], arguments[1])
+        if not os.path.isfile(arguments[0]):
+            print("Send requires a valid file path.")
+            return False
         if schema_instance.is_valid() is False:
-            print("Faild to send connector message")
-            return
+            print("Failed to send connector message")
+            return False
 
         print("\n")
         print(schema_instance.to_json())
@@ -81,11 +85,17 @@ class AssetImportApplication(BaseApplication):
 
         ConnectorInstance.write_message(
             context, cls._IMPORT_ASSET_UUID, schema_instance.to_json())
+        return True
 
     @classmethod
-    def original_send_to(cls, context, message):
+    def original_send_to(cls, context, arguments):
         """ Sends the path string instead the new schema format """
-        ConnectorInstance.write_message(context, cls._IMPORT_SBSAR_UUID, message)
+        if os.path.isfile(arguments[0]):
+            ConnectorInstance.write_message(context, cls._IMPORT_SBSAR_UUID, arguments[0])
+            return True
+        else:
+            print("Send asset requires a valid file path.")
+            return False
 
     @classmethod
     def get_feature_ids(cls):

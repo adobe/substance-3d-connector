@@ -209,7 +209,6 @@ else ()
     )
 endif ()
 
-set(SUBSTANCE_CONNECTOR_BUILD_TESTS ON)
-if (SUBSTANCE_CONNECTOR_BUILD_TESTS)
+if (CONNECTOR_ENABLE_BUILD_TESTS)
     add_subdirectory("test/unit_test")
 endif ()

@@ -132,7 +132,9 @@ bool registerApplication(Application* application)
 					{
 						uuidString += '-';
 					}
-					uuidString += std::to_string(id.elements[i]);
+          std::stringstream ss;
+          ss << std::hex << id.elements[i];
+					uuidString += std::string(ss.str());
 				}
 				featureLevel.push_back(uuidString);
 			}

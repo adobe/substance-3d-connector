@@ -35,8 +35,8 @@ struct send_to_schema
 	virtual void Serialize(Json::Value& root);
 	virtual void Deserialize(const std::string& json);
 	virtual void Deserialize(const Json::Value& root);
-	virtual std::string getPathExtention();
-	virtual bool isPathFileExtention(const std::string& extention);
+	virtual std::string getPathExtension();
+	virtual bool isPathFileExtension(const std::string& extension);
 
 	/** Helper function to return a string representing the json */
 	std::string GetJsonString();

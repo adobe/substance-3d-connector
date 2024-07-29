@@ -18,17 +18,25 @@ option(CONNECTOR_ENABLE_MODULE_CPP "Enable building the C++ framework" OFF)
 option(CONNECTOR_ENABLE_MODULE_PYTHON "Enable building the python framework" OFF)
 option(CONNECTOR_ENABLE_MODULE_QT "Enable building the Qt C++ framework" OFF)
 option(CONNECTOR_ENABLE_CLI "Enable building the CLI tool package for connector" OFF)
+option(CONNECTOR_ENABLE_BUILD_TESTS "Enable building of tests" ON)
 
-if(NOT DEFINED CONNECTOR_ENABLE_CLI 
-        AND NOT DEFINED CONNECTOR_ENABLE_MODULE_PYTHON 
-        AND NOT DEFINED CONNECTOR_ENABLE_MODULE_CPP 
-        AND NOT DEFINED CONNECTOR_ENABLE_MODULE_QT)
-    set(CONNECTOR_ENABLE_CLI ON)
+message(INFO "ENABLE CONNECTOR CPP MODULE: ${CONNECTOR_ENABLE_MODULE_CPP}")
+message(INFO "ENABLE CONNECTOR CLI: ${CONNECTOR_ENABLE_CLI}")
+message(INFO "ENABLE CONNECTOR QT MODULE: ${CONNECTOR_ENABLE_MODULE_QT}")
+message(INFO "ENABLE CONNECTOR PYTHON MODULE: ${CONNECTOR_ENABLE_MODULE_PYTHON}")
+message(INFO "ENABLE CONNECTOR BUILD TESTS: ${CONNECTOR_ENABLE_BUILD_TESTS}")
+
+if(NOT CONNECTOR_ENABLE_CLI
+      AND NOT CONNECTOR_ENABLE_MODULE_PYTHON
+      AND NOT CONNECTOR_ENABLE_MODULE_CPP
+      AND NOT CONNECTOR_ENABLE_MODULE_QT)
+    set(CONNECTOR_ENABLE_CLI ON CACHE BOOL "Enable building the CLI tool package for connector" FORCE)
     MESSAGE(WARNING "No options specified. Defaulting to building the connector CLI tools")
 endif()
 
 # Build the various modules baseed on flags
 if (CONNECTOR_ENABLE_CLI)
+    set(CONNECTOR_PYTHON_INSTALL_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/install")
     add_subdirectory(cli)
 else ()
     add_subdirectory(core)
@@ -38,7 +46,7 @@ if (CONNECTOR_ENABLE_MODULE_CPP)
     add_subdirectory(module-cpp)
 endif ()
 
-if (CONNECTOR_ENABLE_MODULE_PYTHON AND NOT DEFINED CONNECTOR_ENABLE_CLI)
+if (CONNECTOR_ENABLE_MODULE_PYTHON AND NOT CONNECTOR_ENABLE_CLI)
     add_subdirectory(module-python)
 endif ()
 

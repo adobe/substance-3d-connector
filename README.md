@@ -5,6 +5,20 @@ to one another to share generic data. Our initial use case is to automate and
 simplify the process of exporting and importing assets between applications. 
 This framework can be expanded for use in sharing any data between applications.
 
+
+--------------------------------------------------------------------------
+                        CLI Tools and Default Build
+--------------------------------------------------------------------------
+The default cmake project build will create the python project folder for
+the CLI tool set. The CLI tools act as a connector endpoint and can be used
+to test features and/or integrations of Substance Connector. The CLI tools also
+acts as a recommended example of how a connector integration is structured.
+The CLI tools are written in Python but the structure remains the same for all
+language implementations. The default install directory will either be
+./install or ./cli/install based on if cmake is run at the root or within the
+./cli folder respectively.
+
+
 --------------------------------------------------------------------------
     Implementation Details
 --------------------------------------------------------------------------
