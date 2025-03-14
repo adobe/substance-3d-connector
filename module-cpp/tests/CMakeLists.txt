@@ -38,9 +38,9 @@ elseif (UNIX)
     set(CMAKE_SHARED_LINKER_FLAGS "-W1,-undefined,error -shared -Wl,-rpath=\'$ORIGIN\'")
 endif()
 
-set(CONNECTOR_TEST_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../opt/connector/test/unit_test/")
+set(CONNECTOR_TEST_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../core/test/unit_test/")
 
-set(CONNECTOR_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../opt/connector/include")
+set(CONNECTOR_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../core/include")
 
 set(CONNECTOR_FRAMEWORK_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../src/framework")
 
@@ -54,9 +54,25 @@ add_subdirectory("01_test_uuid_compare")
 add_subdirectory("02_test_find_callback")
 add_subdirectory("03_test_register_export")
 add_subdirectory("04_test_init_shutdown")
+add_subdirectory("05_test_uuid_string")
+
+set(TEST_TARGETS
+  test_uuid_compare
+  test_find_callback
+  test_register_export
+  test_init_shutdown
+  test_uuid_string
+)
 
 # Add a custom target to compile all tests
-add_custom_target("all_tests"
-    DEPENDS test_uuid_compare test_find_callback
-            test_register_export test_init_shutdown
+add_custom_target("substance_connector_cpp_tests"
+    DEPENDS
+    ${TEST_TARGETS}
+)
+
+set_target_properties(
+    ${TEST_TARGETS}
+
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/substance_connector"
 )

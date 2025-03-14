@@ -9,9 +9,12 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-#include <substance/connector/framework/details/sendtoschema.h>
+#include <substance/connector/framework/schemas/connectionschema.h>
+#include <substance/connector/framework/uuid.h>
 #include <json/reader.h>
 #include <json/writer.h>
+#include <algorithm>
+#include <iomanip>
 
 namespace Substance
 {
@@ -19,18 +22,22 @@ namespace Connector
 {
 namespace Framework
 {
-namespace Details
+namespace Schemas
 {
-void send_to_schema::Serialize(Json::Value& root)
+void connection_schema::Serialize(Json::Value& root)
 {
-	root["path"] = path;
-	root["name"] = name;
-	root["uuid"] = uuid;
-	root["type"] = type;
-	root["take_file_ownership"] = take_file_ownership;
+	root["display_name"] = display_name;
+	root["id_name"] = id_name;
+	root["connector_version"] = connector_version;
+	Json::Value featureValue;
+	for (const auto& feature : available_features)
+	{
+		featureValue.append(uuidToString(feature));
+	}
+	root["available_features"] = featureValue;
 }
 
-void send_to_schema::Deserialize(const std::string& json)
+void connection_schema::Deserialize(const std::string& json)
 {
 	Json::Value root;
 	Json::CharReaderBuilder builder;
@@ -47,16 +54,23 @@ void send_to_schema::Deserialize(const std::string& json)
 	}
 }
 
-void send_to_schema::Deserialize(const Json::Value& root)
+void connection_schema::Deserialize(const Json::Value& root)
 {
-	path = root.get("path", "").asString();
-	name = root.get("name", "").asString();
-	uuid = root.get("uuid", "").asString();
-	type = root.get("type", "").asString();
-	take_file_ownership = root.get("take_file_ownership", false).asBool();
+	display_name = root.get("display_name", "").asString();
+	id_name = root.get("id_name", "").asString();
+	connector_version = root.get("connector_version", "").asString();
+	std::vector<substance_connector_uuid_t> featuresIds;
+	const Json::Value featureArray = root["available_features"];
+	featuresIds.reserve(featureArray.size());
+	std::transform(featureArray.begin(),
+				   featureArray.end(),
+				   std::back_inserter(featuresIds),
+				   [](const Json::Value& v) -> substance_connector_uuid_t
+				   { return uuidFromString(v.asString()); });
+	available_features = std::move(featuresIds);
 }
 
-std::string send_to_schema::GetJsonString()
+std::string connection_schema::GetJsonString()
 {
 	Json::Value value;
 	Serialize(value);
@@ -66,22 +80,7 @@ std::string send_to_schema::GetJsonString()
 	return std::move(value_string);
 }
 
-std::string send_to_schema::getPathExtension()
-{
-	std::string fileExtension = "";
-	if (path.length() > 0)
-	{
-		fileExtension = path.substr(path.find_last_of(".") + 1);
-	}
-	return std::move(fileExtension);
-}
-
-bool send_to_schema::isPathFileExtension(const std::string& extension)
-{
-	return this->getPathExtension().compare(extension) == 0;
-}
-
-} // namespace Details
+} // namespace Schemas
 } // namespace Framework
 } // namespace Connector
 } // namespace Substance

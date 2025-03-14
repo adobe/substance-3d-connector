@@ -64,6 +64,11 @@ public:
         mPostShutdownCalled = true;
     }
 
+	const std::vector<substance_connector_uuid_t> getFeatureIds() override
+    {
+        return {};
+    }
+
     // Flags for determining whether the state callbacks are fired
     bool mPreInitCalled;
     bool mPostInitCalled;

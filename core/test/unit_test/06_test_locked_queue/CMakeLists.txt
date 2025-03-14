@@ -1,13 +1,15 @@
+set(TEST_TARGET test_locked_queue)
+
 set(CONNECTOR_TEST_SOURCES
     test.cpp
 )
 
-add_executable(test_locked_queue
+add_executable(${TEST_TARGET}
     ${CONNECTOR_TEST_SOURCES}
 )
 
 target_link_libraries(
-    test_locked_queue PRIVATE
+    ${TEST_TARGET} PRIVATE
 
     test_common
     connector_details
@@ -15,17 +17,20 @@ target_link_libraries(
 
 if (UNIX)
     target_link_libraries(
-        test_locked_queue PRIVATE
+        ${TEST_TARGET} PRIVATE
         pthread
     )
 endif ()
 
 target_include_directories(
-    test_locked_queue PRIVATE
+    ${TEST_TARGET} PRIVATE
 
     "${CONNECTOR_TEST_INCLUDE_DIR}"
     "${CONNECTOR_INCLUDE_DIR}"
 )
 
-set_target_properties(test_locked_queue PROPERTIES CXX_STANDARD 14)
-set_target_properties(test_locked_queue PROPERTIES COMPILE_FLAGS ${SUBSTANCE_CONNECTOR_COMPILE_FLAGS})
+set_target_properties(${TEST_TARGET} PROPERTIES CXX_STANDARD 14)
+
+set_target_properties(${TEST_TARGET} PROPERTIES COMPILE_FLAGS ${SUBSTANCE_CONNECTOR_COMPILE_FLAGS})
+
+add_test(NAME "${TEST_TARGET}" COMMAND ${TEST_TARGET})

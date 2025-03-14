@@ -13,15 +13,18 @@ governing permissions and limitations under the License.
 #                     Connector Qt                     #
 #########################################################
 set(QT_MAJOR_VERSION 5)
-if (Qt6_FOUND)
-	set(QT_MAJOR_VERSION 6)
+if(NOT DEFINED QT_VERSION_MAJOR)
+    if (Qt6_FOUND)
+        set(QT_MAJOR_VERSION 6)
+    endif()
 endif()
 
 set(CONNECTOR_QT_SOURCES
-    src/application.cpp
-    src/export.cpp
     src/module.cpp
     src/system.cpp
+    src/application.cpp
+    src/features/sendmesh.cpp
+    src/features/sendsbsar.cpp
 )
 
 set(CONNECTOR_QT_HEADERS_MOC "")
@@ -30,18 +33,20 @@ if (NOT (DEFINED SUBSTANCE_CONNECTOR_QT_NO_MOC))
     if (Qt5_FOUND)  
         qt5_wrap_cpp(
             CONNECTOR_QT_HEADERS_MOC
-            include/substance/connector/qt/application.h
-            include/substance/connector/qt/export.h
             include/substance/connector/qt/module.h
             include/substance/connector/qt/system.h
+            include/substance/connector/qt/application.h
+            include/substance/connector/qt/features/sendmesh.h
+            include/substance/connector/qt/features/sendsbsar.h
         )
     else()
         qt_wrap_cpp(
             CONNECTOR_QT_HEADERS_MOC
-            include/substance/connector/qt/application.h
-            include/substance/connector/qt/export.h
             include/substance/connector/qt/module.h
             include/substance/connector/qt/system.h
+            include/substance/connector/qt/application.h
+            include/substance/connector/qt/features/sendmesh.h
+            include/substance/connector/qt/features/sendsbsar.h
         )
     endif ()
 endif ()

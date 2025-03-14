@@ -12,7 +12,9 @@ SCHEMA = {
     },
 }
 
+
 class ConnectionSchema:
+    """ Schema for descriptor information about each connection """
     def __init__(self, display_name, id_name, connector_version, available_features):
         self.display_name = display_name
         self.id_name = id_name

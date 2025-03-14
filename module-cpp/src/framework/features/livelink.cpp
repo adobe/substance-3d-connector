@@ -15,7 +15,7 @@ governing permissions and limitations under the License.
 //! @date 20190411
 //! @copyright Adobe. All rights reserved.
 
-#include <substance/connector/framework/livelink.h>
+#include <substance/connector/framework/features/livelink.h>
 
 namespace Substance
 {

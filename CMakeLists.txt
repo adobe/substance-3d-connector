@@ -20,11 +20,11 @@ option(CONNECTOR_ENABLE_MODULE_QT "Enable building the Qt C++ framework" OFF)
 option(CONNECTOR_ENABLE_CLI "Enable building the CLI tool package for connector" OFF)
 option(CONNECTOR_ENABLE_BUILD_TESTS "Enable building of tests" ON)
 
-message(INFO "ENABLE CONNECTOR CPP MODULE: ${CONNECTOR_ENABLE_MODULE_CPP}")
-message(INFO "ENABLE CONNECTOR CLI: ${CONNECTOR_ENABLE_CLI}")
-message(INFO "ENABLE CONNECTOR QT MODULE: ${CONNECTOR_ENABLE_MODULE_QT}")
-message(INFO "ENABLE CONNECTOR PYTHON MODULE: ${CONNECTOR_ENABLE_MODULE_PYTHON}")
-message(INFO "ENABLE CONNECTOR BUILD TESTS: ${CONNECTOR_ENABLE_BUILD_TESTS}")
+message(STATUS "ENABLE CONNECTOR CPP MODULE: ${CONNECTOR_ENABLE_MODULE_CPP}")
+message(STATUS "ENABLE CONNECTOR CLI: ${CONNECTOR_ENABLE_CLI}")
+message(STATUS "ENABLE CONNECTOR QT MODULE: ${CONNECTOR_ENABLE_MODULE_QT}")
+message(STATUS "ENABLE CONNECTOR PYTHON MODULE: ${CONNECTOR_ENABLE_MODULE_PYTHON}")
+message(STATUS "ENABLE CONNECTOR BUILD TESTS: ${CONNECTOR_ENABLE_BUILD_TESTS}")
 
 if(NOT CONNECTOR_ENABLE_CLI
       AND NOT CONNECTOR_ENABLE_MODULE_PYTHON
@@ -34,7 +34,16 @@ if(NOT CONNECTOR_ENABLE_CLI
     MESSAGE(WARNING "No options specified. Defaulting to building the connector CLI tools")
 endif()
 
-# Build the various modules baseed on flags
+if(CONNECTOR_ENABLE_BUILD_TESTS)
+    enable_testing()
+
+    # Currently disabling jsoncpp testing as the public module is failing by default
+    # This will need to be investigated but ideally this should be enabled and pass when
+    # our connector testing is enabled.
+    set(JSONCPP_WITH_TESTS OFF)
+endif()
+
+# Build the various modules based on flags
 if (CONNECTOR_ENABLE_CLI)
     set(CONNECTOR_PYTHON_INSTALL_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/install")
     add_subdirectory(cli)

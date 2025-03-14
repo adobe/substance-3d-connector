@@ -10,7 +10,7 @@ governing permissions and limitations under the License.
 */
 
 //! @file sendtoschema.h
-//! @brief Outlines the messageg schema template for send to events
+//! @brief Outlines the message schema template for send to events
 //! @author Dan Stover - Adobe
 //! @date 2023420
 //! @copyright Adobe. All rights reserved.
@@ -27,10 +27,12 @@ namespace Connector
 {
 namespace Framework
 {
-namespace Details
+namespace Schemas
 {
 struct send_to_schema
 {
+	virtual ~send_to_schema() = default;
+
 	/** Functions to convert take from this class to Jsoncpp and vice versa */
 	virtual void Serialize(Json::Value& root);
 	virtual void Deserialize(const std::string& json);
@@ -41,7 +43,7 @@ struct send_to_schema
 	/** Helper function to return a string representing the json */
 	std::string GetJsonString();
 
-	/** Speifies whether the recieveing application should now own the asset at path */
+	/** Specifies whether the receiving application should now own the asset at path */
 	bool take_file_ownership;
 
 	/** Path of the asset from the send to event */
@@ -57,7 +59,7 @@ struct send_to_schema
 	std::string type;
 };
 
-} // namespace Details
+} // namespace Schemas
 } // namespace Framework
 } // namespace Connector
 } // namespace Substance

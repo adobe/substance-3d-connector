@@ -83,6 +83,11 @@ static unsigned int broadcast_connect_impl(get_default_path_fp get_default_path,
                     iterator += 1u;
                 }
 
+
+                /* Set the return code to true, as any previous errors were
+                 * successfully handled. */
+                retcode = SUBSTANCE_CONNECTOR_SUCCESS;
+
                 connector_clear_directory_list(&elements);
             }
         }

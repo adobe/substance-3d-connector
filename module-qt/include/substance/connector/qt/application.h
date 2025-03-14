@@ -46,6 +46,11 @@ public:
 	//! @brief Close the application's state on shutdown
 	virtual void shutdown() = 0;
 
+	Framework::Application* getApplication()
+	{
+		return mApplication.get();
+	}
+
 protected:
 	//! @brief Internal pointer to the application
 	std::unique_ptr<Framework::Application> mApplication;

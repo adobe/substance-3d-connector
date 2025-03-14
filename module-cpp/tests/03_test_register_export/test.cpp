@@ -16,7 +16,7 @@ governing permissions and limitations under the License.
 //! @copyright Adobe. All rights reserved.
 
 #include <substance/connector/framework/details/callbacks.h>
-#include <substance/connector/framework/export.h>
+#include <substance/connector/framework/features/sendsbsar.h>
 
 #include <common/test_common.h>
 #include <cstdlib>
@@ -25,7 +25,7 @@ governing permissions and limitations under the License.
 
 // begin connector_fw_test_register_export block
 
-static Substance::Connector::Framework::Export exportApplication;
+static Substance::Connector::Framework::SbsarApplication sbsarApplication;
 
 void _connector_test_import_callback(unsigned int context,
                                 const substance_connector_uuid_t *messageType,
@@ -42,7 +42,7 @@ void _connector_test_update_callback(unsigned int context,
 static const char * _connector_fw_test_register_export_errors[] =
 {
     "Failed to find load callback after preinitialization",
-    "Failed to find update callback after preinitialization"
+    "Failed to find update callback after preinitialization",
     "Failed to clear load callback",
     "Failed to clear update callback"
 };
@@ -52,30 +52,30 @@ unsigned int _connector_fw_test_register_export()
     unsigned int result = 0u;
 
     // Register the callbacks
-    exportApplication.mRecvLoadSbsar = _connector_test_import_callback;
-    exportApplication.mRecvUpdateSbsar = _connector_test_update_callback;
+    sbsarApplication.mRecvLoadSbsar = _connector_test_import_callback;
+    sbsarApplication.mRecvUpdateSbsar = _connector_test_update_callback;
 
     // This will register all of the callbacks with the core
-    exportApplication.preInit();
+    sbsarApplication.preInit();
 
     using Substance::Connector::Framework::Details::findCallbacks;
     using Substance::Connector::Framework::Details::unbindCallback;
-    using Substance::Connector::Framework::Export;
+    using Substance::Connector::Framework::SbsarApplication;
 
     // Assert that we can locate the callbacks using their uuids
-    if (findCallbacks(Export::sLoadSbsarId)[0] != _connector_test_import_callback)
+    if (findCallbacks(SbsarApplication::sLoadSbsarId)[0] != _connector_test_import_callback)
     {
         result = 1u;
     }
-    else if (findCallbacks(Export::sUpdateSbsarId)[0] != _connector_test_update_callback)
+    else if (findCallbacks(SbsarApplication::sUpdateSbsarId)[0] != _connector_test_update_callback)
     {
         result = 2u;
     }
-    else if (!unbindCallback(Export::sLoadSbsarId))
+    else if (!unbindCallback(SbsarApplication::sLoadSbsarId))
     {
         result = 3u;
     }
-    else if (!unbindCallback(Export::sUpdateSbsarId))
+    else if (!unbindCallback(SbsarApplication::sUpdateSbsarId))
     {
         result = 4u;
     }

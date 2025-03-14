@@ -13,6 +13,9 @@ governing permissions and limitations under the License.
 #                   Connector Framework                 #
 #########################################################
 
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED YES)
+
 #########################################################
 #                   Project Description                 #
 #########################################################
@@ -30,27 +33,31 @@ set(CONNECTOR_FRAMEWORK_BUILD_VERSION ${CONNECTOR_FRAMEWORK_BUILD_MAJOR_VERSION}
 set(CONNECTOR_FRAMEWORK_SOURCES
     src/framework/application.cpp
     src/framework/core.cpp
-    src/framework/export.cpp
-    src/framework/livelink.cpp
     src/framework/system.cpp
     src/framework/uuid.cpp
+    src/framework/features/livelink.cpp
+    src/framework/features/sendsbsar.cpp
+    src/framework/features/sendmesh.cpp
     src/framework/details/callbacks.cpp
     src/framework/details/dynamicload.cpp
-    src/framework/details/sendtoschema.cpp
-    src/framework/details/connectionschema.cpp
+    src/framework/schemas/sendtoschema.cpp
+    src/framework/schemas/sendmeshschema.cpp
+    src/framework/schemas/connectionschema.cpp
 )
 
 set(CONNECTOR_FRAMEWORK_HEADERS
     include/substance/connector/framework/application.h
     include/substance/connector/framework/callbackstype.h
-    include/substance/connector/framework/export.h
-    include/substance/connector/framework/livelink.h
     include/substance/connector/framework/system.h
     include/substance/connector/framework/uuid.h
-    include/substance/connector/framework/details/connectionschema.h
-    include/substance/connector/framework/details/sendtoschema.h
+    include/substance/connector/framework/features/livelink.h
+    include/substance/connector/framework/features/sendsbsar.h
+    include/substance/connector/framework/features/sendmesh.h
     include/substance/connector/framework/details/callbacks.h
     include/substance/connector/framework/details/dynamicload.h
+    include/substance/connector/framework/schemas/sendtoschema.h
+    include/substance/connector/framework/schemas/sendmeshschema.h
+    include/substance/connector/framework/schemas/connectionschema.h
 )
 
 # Before building, make sure core is also included
@@ -93,5 +100,6 @@ target_compile_definitions(
     -DSUBSTANCE_CONNECTOR_FRAMEWORK_VERSION="${CONNECTOR_FRAMEWORK_BUILD_VERSION}"
 )
 
-# Do not always build the tests, they are opt-in
-# add_subdirectory("tests" EXCLUDE_FROM_ALL)
+if (CONNECTOR_ENABLE_BUILD_TESTS)
+    add_subdirectory("tests")
+endif ()

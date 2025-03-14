@@ -15,7 +15,7 @@ extern "C"
 {
 #endif /* __cplusplus */
 
-typedef unsigned int (*_connector_test_fp)();
+typedef unsigned int (*_connector_test_fp)(void);
 
 void _print_error(const char *name, const char *error);
 

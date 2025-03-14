@@ -44,11 +44,11 @@ unsigned int _connector_fw_test_add_callback()
     // e890d6e1-b903-421b-b453-5127e6efa174
     substance_connector_uuid_t uuid = {0xe890d6e1u, 0xb903421bu, 0xb4535127u, 0xe6efa174u};
 
-    if (!Substance::Connector::Framework::Details::bindCallback(uuid, _test_callback))
+    if (!Substance::Connector::Framework::Details::bindCallback(uuid, {_test_callback}))
     {
         result = 1u;
     }
-    else if (Substance::Connector::Framework::Details::bindCallback(uuid, _test_callback))
+    else if (Substance::Connector::Framework::Details::bindCallback(uuid, {_test_callback}))
     {
         // Second attempt to register the callback should fail
         result = 2u;

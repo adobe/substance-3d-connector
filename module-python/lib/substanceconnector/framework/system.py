@@ -7,7 +7,6 @@ import json
 
 from .application import BaseApplication
 from substanceconnector.framework.instance import ConnectorInstance
-from substanceconnector.framework.assetimport import AssetImportApplication as ImportApplication
 from substanceconnector.framework.connectionschema import ConnectionSchema
 
 class SystemApplication(BaseApplication):
