@@ -15,6 +15,17 @@ governing permissions and limitations under the License.
 //! @date 20190616
 //! @copyright Adobe. All rights reserved.
 
+/******************************************************************************
+ * The system class's purpose is to track connector events related to other connections.
+ * It handles events for when connections are established and closed but also provided an
+ * event for providing details for each new available connection such as what features the
+ * other connection supports or which version of the connector framework the other connection
+ * is using.
+ *
+ * The event for this is mRecvConnectionContext and this information is provided through a
+ * connection_schema instance.
+ ******************************************************************************/
+
 #pragma once
 
 #include <substance/connector/framework/application.h>
@@ -32,7 +43,7 @@ public:
 	System();
 
 	//! @brief Destructor
-	virtual ~System();
+	~System() override;
 
 	//! @brief Run system application preinitialization steps
 	void preInit() override;
@@ -47,7 +58,10 @@ public:
 	const std::vector<substance_connector_uuid_t> getFeatureIds() override;
 
 	//! @brief Callback handler to send connection context
-	static void connectionEstablished(unsigned int context, const substance_connector_uuid_t* uuid, const char* message);
+	//! @parameter incoming_connection_context is the conenction id for the new connection
+	static void connectionEstablished(unsigned int incoming_connection_context,
+									  const substance_connector_uuid_t* uuid,
+									  const char* message);
 
 public:
 	static const substance_connector_uuid_t sConnectionEstablishedId;

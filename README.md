@@ -7,7 +7,7 @@ This framework can be expanded for use in sharing any data between applications.
 
 
 --------------------------------------------------------------------------
-                        CLI Tools and Default Build
+    CLI Tools and Default Build
 --------------------------------------------------------------------------
 The default cmake project build will create the python project folder for
 the CLI tool set. The CLI tools act as a connector endpoint and can be used
@@ -18,6 +18,13 @@ language implementations. The default install directory will either be
 ./install or ./cli/install based on if cmake is run at the root or within the
 ./cli folder respectively.
 
+--------------------------------------------------------------------------
+    Running Unit Tests
+--------------------------------------------------------------------------
+Connector comes with a suite of unit tests for testing both the core library
+as well as the cpp-module. Setting the cmake variable CONNECTOR_ENABLE_BUILD_TESTS
+to true at cmake initialization will enable building of the test applications.
+These tests can be ran post build by running CTest.
 
 --------------------------------------------------------------------------
     Implementation Details
@@ -52,13 +59,14 @@ General lifecycle of an integrations:
 - Shutdown
 
 Connections are automatic once a broadcast message has been sent. Every existing connector
-end point will have context of a new connection and vice versa. 
+end point will have context of a new connection and vice versa.
 
+Connector is a multi-threaded framework and callbacks will be called on a new
+thread. Thread safety is up to the user for callbacks.
 
 --------------------------------------------------------------------------
     Expanding the Framework 
 --------------------------------------------------------------------------
-
 Messages are sent using a string. We use json as a string for formatting
 message structure but this can be used however the user sees fit. All that is
 needed is to create a new derivative of the module base class. As an example, 
@@ -71,7 +79,6 @@ schema, json is expected and an implementation is expected in all language modul
 --------------------------------------------------------------------------
     Coding Style
 --------------------------------------------------------------------------
-
 The naming convention for functions is as follows:
     * All externally facing functions shall be prefixed by substance_connector
     * All internal functions that do not have static linkage are prefixed
@@ -140,7 +147,6 @@ to integrations.
 --------------------------------------------------------------------------
     Compile flags 
 --------------------------------------------------------------------------
-
 There are some define flags that are open for input at compilation. They
 have not all been documented here, but some of them are the following:
 
@@ -168,7 +174,6 @@ Socket backlog count - Number of connections to allow on a listen call
 --------------------------------------------------------------------------
     Bindings
 --------------------------------------------------------------------------
-
 Currently supported language bindings:
 
 C, C++ (Natively)

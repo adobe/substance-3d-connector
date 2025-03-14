@@ -21,13 +21,14 @@ governing permissions and limitations under the License.
 
 #include <string>
 #include <set>
+#include <sstream>
 #include <atomic>
 
 #include <substance/connector/framework/core.h>
 #include <substance/connector/framework/application.h>
 #include <substance/connector/framework/details/callbacks.h>
 #include <substance/connector/framework/details/dynamicload.h>
-#include <substance/connector/framework/details/connectionschema.h>
+#include <substance/connector/framework/schemas/connectionschema.h>
 
 extern "C"
 {
@@ -67,7 +68,7 @@ enum class StartupState : size_t
 
 static std::set<Application*> applications;
 static std::atomic<StartupState> startupState;
-static std::vector<std::string> featureLevel;
+static std::vector<substance_connector_uuid_t> featureLevel;
 static std::string connectionDisplayName;
 static std::string connectionId;
 
@@ -122,22 +123,7 @@ bool registerApplication(Application* application)
 			applications.insert(application);
 			result = true;
 			const auto& featureIds = application->getFeatureIds();
-			for(const auto& id : featureIds)
-			{
-				// NOTE:: This is a good candidate for a util function
-				std::string uuidString;
-				for (size_t i = 0u; i < 4u; ++i)
-				{
-					if(uuidString.size() > 0)
-					{
-						uuidString += '-';
-					}
-          std::stringstream ss;
-          ss << std::hex << id.elements[i];
-					uuidString += std::string(ss.str());
-				}
-				featureLevel.push_back(uuidString);
-			}
+			featureLevel.insert(featureLevel.end(), featureIds.begin(), featureIds.end());
 		}
 
 		// Revert back to a shutdown state after successfully registering the
@@ -185,7 +171,7 @@ bool init(const std::string& display_name, const std::string& id, void* module)
 }
 
 std::string getConnectionContext() {
-		Details::connection_schema connection_details;
+		Schemas::connection_schema connection_details;
 		connection_details.display_name = connectionDisplayName;
 		connection_details.id_name = connectionId;
 		connection_details.connector_version = version();

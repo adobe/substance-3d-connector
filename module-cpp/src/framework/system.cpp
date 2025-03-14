@@ -39,15 +39,18 @@ const substance_connector_uuid_t System::sConnectionClosedId = {
 	0xaf6c6e3au,
 	0x93f1959du};
 
-	const substance_connector_uuid_t System::sConnectionUpdateContextId = {
+const substance_connector_uuid_t System::sConnectionUpdateContextId = {
 	// 39b07a67-4996-4b62-a340-908a81f66562
 	0x39b07a67u,
 	0x49964b62u,
 	0xa340908au,
 	0x81f66562u};
 
-
-System::System() : mRecvConnectionEstablished(nullptr), mRecvConnectionClosed(nullptr), mRecvConnectionContext(nullptr), mUserData(0x0u)
+System::System()
+	: mRecvConnectionEstablished(nullptr)
+	, mRecvConnectionClosed(nullptr)
+	, mRecvConnectionContext(nullptr)
+	, mUserData(0x0u)
 {
 }
 
@@ -58,7 +61,8 @@ System::~System()
 void System::preInit()
 {
 	// Initialize the callbacks
-	mCallbacks.push_back(CallbackPair(sConnectionEstablishedId, {System::connectionEstablished, mRecvConnectionEstablished}));
+	mCallbacks.push_back(
+		CallbackPair(sConnectionEstablishedId, {System::connectionEstablished, mRecvConnectionEstablished}));
 	mCallbacks.push_back(CallbackPair(sConnectionClosedId, {mRecvConnectionClosed}));
 	mCallbacks.push_back(CallbackPair(sConnectionUpdateContextId, {mRecvConnectionContext}));
 
@@ -69,25 +73,28 @@ void System::postInit()
 {
 }
 
-const std::vector<substance_connector_uuid_t> System::getFeatureIds() {
+const std::vector<substance_connector_uuid_t> System::getFeatureIds()
+{
 	return {
-	  System::sConnectionEstablishedId,
-	  System::sConnectionClosedId,
+		System::sConnectionUpdateContextId,
+		System::sConnectionEstablishedId,
+		System::sConnectionClosedId,
 	};
 }
 
-void System::connectionEstablished(
-	unsigned int context,
-	const substance_connector_uuid_t* uuid,
-	const char* message)
+void System::connectionEstablished(unsigned int incoming_connection_context,
+								   const substance_connector_uuid_t* uuid,
+								   const char* message)
 {
 	auto context_message = getConnectionContext();
-	CONNECTOR_FRAMEWORK_CALL(write_message)(context, &System::sConnectionUpdateContextId, context_message.c_str());
+	CONNECTOR_FRAMEWORK_CALL(write_message)
+	(incoming_connection_context, &System::sConnectionUpdateContextId, context_message.c_str());
 }
 
 void System::postShutdown()
 {
 }
+
 } // namespace Framework
 } // namespace Connector
 } // namespace Substance

@@ -93,7 +93,7 @@ set(TEST_TARGETS
     test_open_tcp
 )
 
-add_custom_target("substance_connector_all_tests"
+add_custom_target("substance_connector_core_tests"
     DEPENDS
     # Libraries shared between testing programs
     test_common
@@ -103,7 +103,7 @@ add_custom_target("substance_connector_all_tests"
 )
 
 set_target_properties(
-    substance_connector_all_tests
+    substance_connector_core_tests
     PROPERTIES
     EXCLUDE_FROM_DEFAULT_BUILD TRUE
     EXCLUDE_FROM_ALL TRUE

@@ -21,18 +21,26 @@ if (DEFINED CONNECTOR_PYTHON_INSTALL_LOCATION)
         FILES
         substanceconnector/framework/__init__.py
         substanceconnector/framework/application.py
-        substanceconnector/framework/assetimport.py
         substanceconnector/framework/callbacks.py
         substanceconnector/framework/connectionschema.py
         substanceconnector/framework/exception.py
         substanceconnector/framework/instance.py
         substanceconnector/framework/message.py
-        substanceconnector/framework/substanceimport.py
         substanceconnector/framework/system.py
         substanceconnector/framework/trampoline.py
         substanceconnector/framework/uuid_utils.py
 
         DESTINATION
         ${CONNECTOR_PYTHON_INSTALL_LOCATION}/substanceconnector/framework
+    )
+
+    install(
+        FILES
+        substanceconnector/framework/features/rawdata.py
+        substanceconnector/framework/features/sbsarimport.py
+        substanceconnector/framework/features/meshimport.py
+
+        DESTINATION
+        ${CONNECTOR_PYTHON_INSTALL_LOCATION}/substanceconnector/framework/features
     )
 endif ()

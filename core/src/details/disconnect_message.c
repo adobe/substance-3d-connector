@@ -24,10 +24,6 @@ unsigned int connector_handle_error_disconnect(unsigned int context)
 
     if (name != NULL)
     {
-        /* Dispatch directly from read thread - special message */
-        connector_notify_trampolines(context, &connector_internal_connection_closed_uuid,
-                                name);
-
         /* Free contents of application name after finished */
         connector_free(name);
         name = NULL;

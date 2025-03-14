@@ -88,10 +88,6 @@ static void internal_handshake_callback(unsigned int context,
         /* Set the application name to the context */
         connector_context_set_application_name(context, message);
 
-        connector_notify_trampolines(in_message->context,
-                                &connector_internal_handshake_uuid,
-                                in_message->message);
-
         connector_clear_message(in_message);
         connector_free(in_message);
     }

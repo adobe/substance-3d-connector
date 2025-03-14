@@ -19,6 +19,9 @@ governing permissions and limitations under the License.
 
 #include <substance/connector/qt/application.h>
 
+#include <substance/connector/framework/schemas/connectionschema.h>
+Q_DECLARE_METATYPE(Substance::Connector::Framework::Schemas::connection_schema)
+
 namespace Substance
 {
 namespace Connector
@@ -53,7 +56,7 @@ Q_SIGNALS:
 
 	//! @brief Signal that is emitted when a endpoint is sending the context / feature level
 	//! @param context Integer representing the underlying connection
-	//! @param message String value of the received message
+	//! @param connection Connection information about the context
 	void updateConnectionContext(unsigned int context, const QString& message);
 };
 } // namespace Qt

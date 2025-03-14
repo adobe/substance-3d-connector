@@ -9,27 +9,31 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 ]]
 
+set(TEST_TARGET test_find_callback)
+
 set(CONNECTOR_TEST_FIND_CALLBACK_SOURCES
     test.cpp
 
     ${CONNECTOR_FRAMEWORK_SRC_DIR}/uuid.cpp
 )
 
-add_executable(test_find_callback ${CONNECTOR_TEST_FIND_CALLBACK_SOURCES}
+add_executable(${TEST_TARGET} ${CONNECTOR_TEST_FIND_CALLBACK_SOURCES}
                                   ${CONNECTOR_TEST_COMMON_SOURCES}
                                   ${CONNECTOR_TEST_COMMON_HEADERS})
 
 target_link_libraries(
-    test_find_callback PRIVATE
+    ${TEST_TARGET} PRIVATE
 
     substance_connector
     substanceconnector_framework
 )
 
 target_include_directories(
-    test_find_callback PRIVATE
+    ${TEST_TARGET} PRIVATE
 
     "${CONNECTOR_TEST_INCLUDE_DIR}"
     "${CONNECTOR_INCLUDE_DIR}"
     "${CONNECTOR_FRAMEWORK_INCLUDE_DIR}"
 )
+
+add_test(NAME "${TEST_TARGET}" COMMAND ${TEST_TARGET})

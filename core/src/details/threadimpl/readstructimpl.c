@@ -85,16 +85,10 @@ unsigned int connector_read_thread_cleanup_connections(connector_read_thread_t *
     unsigned int item_removed = 0u;
     uint32_t i = 0u;
 
-    /* Iterate over all of the thread's contexts */
-    for (i = 0u; i < thread->assigned_contexts; ++i)
+    /* Iterate over all of the thread's contexts.
+    Iterate backwards so that we can remove contexts without needing to adjust indexes. */
+    for (i = thread->assigned_contexts; i-- > 0u;)
     {
-        /* Backtrack one index if a context was removed */
-        if (item_removed != 0u)
-        {
-            i -= 1u;
-            item_removed = 0u;
-        }
-
         /* Acquire the state of the current context */
         context = thread->context_ids[i];
         context_state = connector_context_state(context);
@@ -106,8 +100,6 @@ unsigned int connector_read_thread_cleanup_connections(connector_read_thread_t *
 
             if (retcode == SUBSTANCE_CONNECTOR_SUCCESS)
             {
-                item_removed = 1u;
-
                 /* Perform a shutdown of the context */
                 retcode = connector_context_shutdown_from_read_thread(context);
             }
