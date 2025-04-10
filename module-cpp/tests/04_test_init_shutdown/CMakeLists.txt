@@ -35,3 +35,12 @@ target_include_directories(
 )
 
 add_test(NAME "${TEST_TARGET}" COMMAND ${TEST_TARGET})
+
+if (WIN32)
+    set_tests_properties(
+        ${TEST_TARGET}
+        PROPERTIES
+        ENVIRONMENT_MODIFICATION
+            "PATH=path_list_prepend:$<TARGET_FILE_DIR:substance_connector>"
+    )
+endif()

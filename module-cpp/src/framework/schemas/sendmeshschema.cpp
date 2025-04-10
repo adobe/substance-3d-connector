@@ -52,7 +52,6 @@ std::map<mesh_export_schema::FileFormat, std::string> mesh_export_schema::FileFo
 	{mesh_export_schema::FileFormat::usdc, "usdc"},
 };
 
-
 std::map<mesh_export_schema::AxisConvention, std::string> mesh_export_schema::AxisConventionStrings = {
 	{mesh_export_schema::AxisConvention::ForceYUp_XRight_mZForward, "ForceYUp_XRight_mZForward"},
 	{mesh_export_schema::AxisConvention::ForceZUp_XRight_YForward, "ForceZUp_XRight_YForward"},
@@ -189,14 +188,12 @@ void mesh_export_schema::Deserialize(const Json::Value& root)
 	if (root.isMember("supportedFormats"))
 	{
 		const auto& formats_array = root.get("supportedFormats", {});
-		if ((*formats_array.begin()).asString().size() > 0)
+		if (!formats_array.empty())
 		{
-			const auto last_index = formats_array.end().index();
-			supportedFormats = {};
-			for (Json::UInt index = 0; index <= last_index; index++)
+			supportedFormats = std::vector<FileFormat>{};
+			for (const auto& format_itr : formats_array)
 			{
-				mesh_export_schema::FileFormat current_value =
-					getKeyFromValue(FileFormatStrings, formats_array[index].asString());
+				mesh_export_schema::FileFormat current_value = getKeyFromValue(FileFormatStrings, format_itr.asString());
 				supportedFormats.value().emplace_back(current_value);
 			}
 		}

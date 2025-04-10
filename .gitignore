@@ -27,3 +27,6 @@
 
 # Generated doc files
 **/[dD]ocs/**/*
+
+# Build systems
+**/jenkins
